@@ -1,12 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const matchController = require("../controllers/matchController");
 
-router.get('/', (req, res) => {
-    res.send('Get all matches');
-});
-
-router.post('/', (req, res) => {
-    res.send('Create a new match');
-});
+router.get('/', matchController.getAllMatches);
+router.get('/:id', matchController.getMatchById);
+router.post('/', matchController.createMatch);
 
 module.exports = router;
