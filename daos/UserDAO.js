@@ -28,6 +28,15 @@ class UserDAO {
         return new UserDTO(row.userid, row.username, row.email, row.role, row.createdat, row.updatedat);
     }
 
+    async getUserByUsername(username) {
+        const query = 'SELECT * FROM AppUser WHERE username = $1';
+        const result = await db.query(query, [username]);
+
+        if (result.rows.length === 0) return null;
+
+        return result.rows[0];
+    }
+
     async getAllUsers() {
         const query = 'SELECT * FROM AppUser';
         const result = await db.query(query);
@@ -48,6 +57,13 @@ class UserDAO {
     async deleteUser(userId) {
         const query = 'DELETE FROM AppUser WHERE userId = $1';
         await db.query(query, [userId]);
+    }
+
+    async validateUser(username, password) {
+        const user = await this.getUserByUsername(username);
+        if (!user) return null;
+        if (password !== user.password) return null;
+        return user;
     }
 }
 
