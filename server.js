@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
 const protectedRoutes = require('./routes/protected');
 
+
 dotenv.config();
 const app = express();
 app.use(express.json());

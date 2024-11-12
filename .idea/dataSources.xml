@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="scorehubdb@localhost" uuid="4e8d655f-bb53-43db-9e80-3dde99a36dd1">
+    <data-source source="LOCAL" name="scorehubdb@localhost [2]" uuid="4b401bef-721c-4fd1-aafb-7997ab37ddef">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>

@@ -2,6 +2,7 @@ const UserDAO = require('../daos/UserDAO');
 const jwt = require('jsonwebtoken');
 
 class AuthController {
+
     async register(req, res) {
         const { username, password, email, role } = req.body;
         const user = await UserDAO.createUser(username, email, password, role);

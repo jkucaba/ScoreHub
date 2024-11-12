@@ -4,6 +4,7 @@ const UserDTO = require('../dtos/UserDTO');
 const { v4: uuidv4 } = require('uuid');
 
 class UserDAO {
+
     async createUser(username, email, password, role) {
         const userId = uuidv4();
         const createdAt = new Date();
@@ -65,6 +66,7 @@ class UserDAO {
         if (password !== user.password) return null;
         return user;
     }
+
 }
 
 module.exports = new UserDAO();
