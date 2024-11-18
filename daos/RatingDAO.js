@@ -1,7 +1,6 @@
 const RatingDTO = require('../dtos/RatingDTO');
 
 const db = require('../database');
-const RatingDTO = require('../dtos/RatingDTO');
 const { v4: uuidv4 } = require('uuid');
 
 class RatingDAO {
