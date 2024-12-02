@@ -22,10 +22,30 @@ class MatchDAO {
     }
 
     async getAllMatches() {
-        const query = 'SELECT * FROM Match';
+        const query =  `
+            SELECT
+                m.matchid,
+                m.matchdate,
+                m.judge,
+                ht.teamName AS homeTeamName,
+                ot.teamName AS opponentTeamName,
+                wt.teamName AS winnerTeamName
+            FROM Match m
+                     LEFT JOIN team ht ON m.hometeamid = ht.teamid
+                     LEFT JOIN team ot ON m.opponentteamid = ot.teamid
+                     LEFT JOIN team wt ON m.matchwinnerid = wt.teamid
+                     `;
         const result = await db.query(query);
+        console.log(result.rows)
         return result.rows.map(row =>
-            new MatchDTO(row.matchid, row.matchdate, row.judge, row.hometeamid, row.opponentteamid, row.matchwinnerid)
+            new MatchDTO(
+                row.matchid,
+                row.matchdate,
+                row.judge,
+                row.hometeamname,
+                row.opponentteamname,
+                row.winnerteamname
+            )
         );
     }
 

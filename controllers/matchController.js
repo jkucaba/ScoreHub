@@ -3,6 +3,7 @@ const MatchDAO = require('../daos/MatchDAO');
 const getAllMatches = async (req, res) => {
     try {
         const matches = await MatchDAO.getAllMatches();
+        console.log(matches)
         res.json(matches);
     } catch (error) {
         console.error("Error fetching matches:", error);

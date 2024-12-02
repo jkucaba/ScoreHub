@@ -5,18 +5,21 @@ const getAllPlayers = async (req, res) => {
         const players = await PlayerDAO.getAllPlayers();
         res.json(players);
     } catch (error) {
-        console.error("Error fetching players:", error); // Zapisuje szczegóły błędu w konsoli
+        console.error("Error fetching players:", error);
         res.status(500).json({ error: "Error fetching players" });
     }
 };
+
 const getPlayerById = async (req, res) => {
-    const { id } = req.params;
     try {
-        const player = await PlayerDAO.getPlayerById(id);
-        if (!player) return res.status(404).json({ error: 'Player not found' });
+        const player = await PlayerDAO.getPlayerById(req.params.id);
+        if (!player) {
+            return res.status(404).json({ error: "Player not found" });
+        }
         res.json(player);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching player' });
+        console.error("Error fetching player:", error);
+        res.status(500).json({ error: "Error fetching player" });
     }
 };
 

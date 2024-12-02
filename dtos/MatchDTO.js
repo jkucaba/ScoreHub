@@ -1,11 +1,11 @@
 class MatchDTO {
-    constructor(matchId, matchDate, judge, homeTeamId, opponentTeamId, matchWinnerId) {
+    constructor(matchId, matchDate, judge, homeTeamName, opponentTeamName, winnerTeamName) {
         this.matchId = matchId;
         this.matchDate = matchDate;
         this.judge = judge;
-        this.homeTeamId = homeTeamId;
-        this.opponentTeamId = opponentTeamId;
-        this.matchWinnerId = matchWinnerId;
+        this.homeTeamName = homeTeamName; // Zaktualizowano
+        this.opponentTeamName = opponentTeamName; // Zaktualizowano
+        this.winnerTeamName = winnerTeamName; // Zaktualizowano
     }
 }
 
