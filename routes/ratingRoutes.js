@@ -1,13 +1,14 @@
 // routes/ratingRoutes.js
 const express = require('express');
-const RatingController = require('../controllers/RatingController');
+const RatingController = require('../controllers/ratingController');
 
 const router = express.Router();
 
-router.post('/ratings', RatingController.createRating);
-router.get('/ratings/:ratingId', RatingController.getRatingById);
-router.get('/ratings', RatingController.getAllRatings);
-router.put('/ratings/:ratingId', RatingController.updateRating);
-router.delete('/ratings/:ratingId', RatingController.deleteRating);
+router.post('/', RatingController.createRating);
+router.get('/:matchId', RatingController.getRatingsByMatchId);
+router.get('/player/:playerId', RatingController.getRatingsByPlayerId);
+router.get('/', RatingController.getAllRatings);
+router.put('/:ratingId', RatingController.updateRating);
+router.delete('/:ratingId', RatingController.deleteRating);
 
 module.exports = router;

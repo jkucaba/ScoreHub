@@ -1,5 +1,5 @@
-// controllers/CommentController.js
 const CommentDAO = require('../daos/CommentDAO');
+const CommentMatchDAO = require('../daos/CommentMatchDAO');
 
 const getAllComments = async (req, res) => {
     try {
@@ -22,10 +22,24 @@ const getCommentById = async (req, res) => {
     }
 };
 
-const createComment = async (req, res) => {
-    const { text, userId, postId } = req.body;
+const getCommentsByMatchId = async (req, res) => {
+    const { matchId } = req.params;
     try {
-        const comment = await CommentDAO.createComment(text, userId, postId);
+        const commentIds = await CommentMatchDAO.getCommentIdsByMatchId(matchId);
+        console.log(commentIds);
+        if (commentIds.length === 0) return res.status(404).json({ error: 'No comments found for this match' });
+        const comments = await CommentDAO.getCommentsByIds(commentIds);
+        res.json(comments);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching comments for match' });
+    }
+};
+
+const createComment = async (req, res) => {
+    const { text, userId, matchId } = req.body;
+    try {
+        const comment = await CommentDAO.createComment(userId, text);
+        await CommentMatchDAO.createCommentMatch(comment.commentId, matchId);
         res.status(201).json(comment);
     } catch (error) {
         res.status(500).json({ error: 'Error creating comment' });
@@ -56,6 +70,7 @@ const deleteComment = async (req, res) => {
 module.exports = {
     getAllComments,
     getCommentById,
+    getCommentsByMatchId,
     createComment,
     updateComment,
     deleteComment,

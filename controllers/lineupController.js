@@ -1,4 +1,3 @@
-// controllers/LineupController.js
 const LineupDAO = require('../daos/LineupDAO');
 
 const getAllLineups = async (req, res) => {
@@ -12,9 +11,9 @@ const getAllLineups = async (req, res) => {
 };
 
 const getLineupById = async (req, res) => {
-    const { id } = req.params;
+    const { matchId } = req.params;
     try {
-        const lineup = await LineupDAO.getLineupById(id);
+        const lineup = await LineupDAO.getLineupById(matchId);
         if (!lineup) return res.status(404).json({ error: 'Lineup not found' });
         res.json(lineup);
     } catch (error) {
@@ -23,11 +22,13 @@ const getLineupById = async (req, res) => {
 };
 
 const createLineup = async (req, res) => {
-    const { matchId, playerId, position } = req.body;
+    const { matchId, playerId } = req.body;
     try {
-        const lineup = await LineupDAO.createLineup(matchId, playerId, position);
+        console.log(`Creating lineup with matchId: ${matchId}, playerId: ${playerId}`); // Add logging
+        const lineup = await LineupDAO.createLineup(matchId, playerId);
         res.status(201).json(lineup);
     } catch (error) {
+        console.error('Error creating lineup:', error); // Add logging
         res.status(500).json({ error: 'Error creating lineup' });
     }
 };

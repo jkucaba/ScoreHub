@@ -1,3 +1,4 @@
+// controllers/matchController.js
 const MatchDAO = require('../daos/MatchDAO');
 
 const getAllMatches = async (req, res) => {
@@ -13,33 +14,31 @@ const getAllMatches = async (req, res) => {
 
 const getMatchById = async (req, res) => {
     try {
-        const match = await MatchDAO.getMatchById(req.params.id);
-        if (!match) {
-            return res.status(404).json({ error: "Match not found" });
-        }
-        res.json(match);
+        const { matchId } = req.params;
+        console.log(`Fetching match with matchId: ${matchId}`);
+        const match = await MatchDAO.getMatchById(matchId);
+        console.log(match)
+        res.status(200).json(match);
     } catch (error) {
-        console.error("Error fetching match:", error);
-        res.status(500).json({ error: "Error fetching match" });
+        console.error('Error fetching match:', error);
+        res.status(500).json({ error: 'Failed to fetch match' });
     }
 };
 
 const createMatch = async (req, res) => {
     try {
-        const newMatch = await MatchDAO.createMatch(req.body);
-        res.status(201).json(newMatch);
+        const { matchDate, judge, homeTeamId, awayTeamId, winnerTeamId } = req.body;
+        const match = await MatchDAO.createMatch(matchDate, judge, homeTeamId, awayTeamId, winnerTeamId);
+        res.status(201).json(match);
     } catch (error) {
-        console.error("Error creating match:", error);
-        res.status(500).json({ error: "Error creating match" });
+        console.error('Error creating match:', error);
+        res.status(500).json({ error: 'Failed to create match' });
     }
 };
 
 const updateMatch = async (req, res) => {
     try {
-        const updatedMatch = await MatchDAO.updateMatch(req.params.id, req.body);
-        if (!updatedMatch) {
-            return res.status(404).json({ error: "Match not found" });
-        }
+        const updatedMatch = await MatchDAO.updateMatch(req.params.matchId, req.body);
         res.json(updatedMatch);
     } catch (error) {
         console.error("Error updating match:", error);
@@ -49,10 +48,7 @@ const updateMatch = async (req, res) => {
 
 const deleteMatch = async (req, res) => {
     try {
-        const deleted = await MatchDAO.deleteMatch(req.params.id);
-        if (!deleted) {
-            return res.status(404).json({ error: "Match not found" });
-        }
+        const deleted = await MatchDAO.deleteMatch(req.params.matchId);
         res.status(204).end();
     } catch (error) {
         console.error("Error deleting match:", error);

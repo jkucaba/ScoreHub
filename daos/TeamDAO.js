@@ -5,14 +5,15 @@ const { v4: uuidv4 } = require('uuid');
 class TeamDAO {
     async createTeam(teamName, foundedYear, stadium, city, country, coach, stadiumCapacity) {
         const teamId = uuidv4();
+        const currentDate = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
 
         const query = `
-            INSERT INTO Team (teamId, teamName, foundedYear, stadium, city, country, coach, stadiumCapacity)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            INSERT INTO Team (teamId, teamName, foundedYear, stadium, city, country, coach, stadiumCapacity, createdAt, updatedAt)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         `;
-        await db.query(query, [teamId, teamName, foundedYear, stadium, city, country, coach, stadiumCapacity]);
+        await db.query(query, [teamId, teamName, foundedYear, stadium, city, country, coach, stadiumCapacity, currentDate, currentDate]);
 
-        return new TeamDTO(teamId, teamName, foundedYear, stadium, city, country, coach, stadiumCapacity);
+        return new TeamDTO(teamId, teamName, foundedYear, stadium, city, country, coach, stadiumCapacity, currentDate, currentDate);
     }
 
     async getTeamById(teamId) {
@@ -28,6 +29,7 @@ class TeamDAO {
     async getAllTeams() {
         const query = 'SELECT * FROM Team';
         const result = await db.query(query);
+        console.log(result.rows);
 
         return result.rows.map(row =>
             new TeamDTO(row.teamid, row.teamname, row.foundedyear, row.stadium, row.city, row.country, row.coach, row.stadiumcapacity)

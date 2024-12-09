@@ -7,5 +7,6 @@ router.get('/:id', LeagueTableController.getLeagueTableById);
 router.post('/', LeagueTableController.createLeagueTable);
 router.put('/:id', LeagueTableController.updateLeagueTable);
 router.delete('/:id', LeagueTableController.deleteLeagueTable);
+router.post('/assign-team', LeagueTableController.assignTeamToLeagueTable);
 
 module.exports = router;

@@ -5,10 +5,13 @@ const { v4: uuidv4 } = require('uuid');
 
 class UserDAO {
 
-    async createUser(username, email, password, role) {
+    async createUser(username, password) {
+
         const userId = uuidv4();
         const createdAt = new Date();
         const updatedAt = new Date();
+        const role = 'user';
+        const email = "usermail@mail.com"
 
         const query = `
             INSERT INTO AppUser (userId, username, email, password, role, createdAt, updatedAt)

@@ -23,9 +23,9 @@ const getMatchEventById = async (req, res) => {
 };
 
 const createMatchEvent = async (req, res) => {
-    const { matchId, eventType, minute, playerId } = req.body;
+    const { matchId, playerId, eventType, context,  } = req.body;
     try {
-        const matchEvent = await MatchEventDAO.createMatchEvent(matchId, eventType, minute, playerId);
+        const matchEvent = await MatchEventDAO.createMatchEvent(matchId, playerId, eventType, context);
         res.status(201).json(matchEvent);
     } catch (error) {
         res.status(500).json({ error: 'Error creating match event' });

@@ -5,23 +5,21 @@ const { v4: uuidv4 } = require('uuid');
 class RatingPlayerDAO {
     async createRatingPlayer(ratingId, playerId) {
         const query = `
-            INSERT INTO rating_players (ratingId, playerId)
+            INSERT INTO rating_player (ratingId, playerId)
             VALUES ($1, $2)
         `;
         await db.query(query, [ratingId, playerId]);
         return new RatingPlayerDTO(ratingId, playerId);
     }
 
-    async getRatingPlayer(ratingId, playerId) {
-        const query = 'SELECT * FROM rating_players WHERE ratingId = $1 AND playerId = $2';
-        const result = await db.query(query, [ratingId, playerId]);
-        if (result.rows.length === 0) return null;
-        const row = result.rows[0];
-        return new RatingPlayerDTO(row.ratingid, row.playerid);
+    async getRatingIdsByPlayerId(playerId) {
+        const query = 'SELECT ratingId FROM rating_player WHERE playerId = $1';
+        const result = await db.query(query, [playerId]);
+        return result.rows.map(row => row.ratingid);
     }
 
     async getAllRatingPlayers() {
-        const query = 'SELECT * FROM rating_players';
+        const query = 'SELECT * FROM rating_player';
         const result = await db.query(query);
         return result.rows.map(row =>
             new RatingPlayerDTO(row.ratingid, row.playerid)
@@ -29,7 +27,7 @@ class RatingPlayerDAO {
     }
 
     async deleteRatingPlayer(ratingId, playerId) {
-        const query = 'DELETE FROM rating_players WHERE ratingId = $1 AND playerId = $2';
+        const query = 'DELETE FROM rating_player WHERE ratingId = $1 AND playerId = $2';
         await db.query(query, [ratingId, playerId]);
     }
 }

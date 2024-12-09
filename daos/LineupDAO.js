@@ -6,19 +6,20 @@ class LineupDAO {
     async createLineup(matchId, playerId) {
         const lineupId = uuidv4();
         const query = `
-            INSERT INTO lineups (lineupId, matchId, playerId)
+            INSERT INTO lineup (lineupid, matchid, playerid)
             VALUES ($1, $2, $3)
         `;
         await db.query(query, [lineupId, matchId, playerId]);
         return new LineupDTO(lineupId, matchId, playerId);
     }
 
-    async getLineupById(lineupId) {
-        const query = 'SELECT * FROM lineups WHERE lineupId = $1';
-        const result = await db.query(query, [lineupId]);
+    async getLineupById(matchId) {
+        const query = 'SELECT * FROM lineup WHERE matchid = $1';
+        const result = await db.query(query, [matchId]);
         if (result.rows.length === 0) return null;
-        const row = result.rows[0];
-        return new LineupDTO(row.lineupid, row.matchid, row.playerid);
+        return result.rows.map(row =>
+            new LineupDTO(row.lineupid, row.matchid, row.playerid)
+        );
     }
 
     async getAllLineups() {

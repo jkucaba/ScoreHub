@@ -15,7 +15,7 @@ class AuthController {
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        const token = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.userId, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
     }
 
@@ -35,8 +35,17 @@ class AuthController {
                 return res.status(401).json({ message: 'Failed to authenticate token' });
             }
             req.userId = decoded.userId;
+            req.user = decoded; // Add decoded user information to the request object
             next();
         });
+    }
+
+    admin(req, res, next) {
+        if (req.user && req.user.role === 'admin') {
+            next();
+        } else {
+            res.status(403).json({ message: 'Access denied.' });
+        }
     }
 }
 

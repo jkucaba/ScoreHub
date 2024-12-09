@@ -3,9 +3,9 @@ class MatchDTO {
         this.matchId = matchId;
         this.matchDate = matchDate;
         this.judge = judge;
-        this.homeTeamName = homeTeamName; // Zaktualizowano
-        this.opponentTeamName = opponentTeamName; // Zaktualizowano
-        this.winnerTeamName = winnerTeamName; // Zaktualizowano
+        this.homeTeamName = homeTeamName;
+        this.opponentTeamName = opponentTeamName;
+        this.winnerTeamName = winnerTeamName;
     }
 }
 

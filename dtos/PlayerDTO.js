@@ -1,5 +1,5 @@
 class PlayerDTO {
-    constructor(playerId, firstName, lastName, position, dateOfBirth, nationality, teamId, goalCount, assistCount, yellowCardCount, redCardCount, jerseyNumber, playedMinutes) {
+    constructor(playerId, firstName, lastName, position, dateOfBirth, nationality, teamId, goalCount, assistCount, yellowCardCount, redCardCount, jerseyNumber, playedMinutes, createdAt, updatedAt) {
         this.playerId = playerId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -13,6 +13,8 @@ class PlayerDTO {
         this.redCardCount = redCardCount;
         this.jerseyNumber = jerseyNumber;
         this.playedMinutes = playedMinutes;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }
 

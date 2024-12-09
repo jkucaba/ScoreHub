@@ -38,9 +38,6 @@ const updateTeam = async (req, res) => {
     try {
         const { teamName, foundedYear, stadium, city, country, coach, stadiumCapacity } = req.body;
         const updatedTeam = await TeamDAO.updateTeam(req.params.id, teamName, foundedYear, stadium, city, country, coach, stadiumCapacity);
-        if (!updatedTeam) {
-            return res.status(404).json({ error: "Team not found" });
-        }
         res.json(updatedTeam);
     } catch (error) {
         console.error("Error updating team:", error);
@@ -51,9 +48,6 @@ const updateTeam = async (req, res) => {
 const deleteTeam = async (req, res) => {
     try {
         const deleted = await TeamDAO.deleteTeam(req.params.id);
-        if (!deleted) {
-            return res.status(404).json({ error: "Team not found" });
-        }
         res.status(204).end();
     } catch (error) {
         console.error("Error deleting team:", error);

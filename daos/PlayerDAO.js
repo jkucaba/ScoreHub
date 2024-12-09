@@ -1,4 +1,3 @@
-// daos/PlayerDAO.js
 const db = require('../database');
 const PlayerDTO = require('../dtos/PlayerDTO');
 const { v4: uuidv4 } = require('uuid');
@@ -24,7 +23,6 @@ class PlayerDAO {
             LEFT JOIN team t ON p.teamid = t.teamid
         `;
         const result = await db.query(query);
-        console.log(result.rows)
         return result.rows;
     }
 
@@ -44,44 +42,50 @@ class PlayerDAO {
                 p.jerseynumber,
                 p.playedminutes,
                 t.teamname AS teamname
-            FROM Players p
-            LEFT JOIN Teams t ON p.teamid = t.teamid
+            FROM player p
+            LEFT JOIN team t ON p.teamid = t.teamid
             WHERE p.playerid = $1
         `;
         const result = await db.query(query, [playerId]);
-        console.log(result.rows)
         return result.rows[0];
     }
+
+    async getPlayersByTeamId(teamId) {
+        const query = `
+            SELECT 
+                p.playerid,
+                p.firstname,
+                p.lastname,
+                p.position,
+                p.dateofbirth,
+                p.nationality,
+                p.goalcount,
+                p.assistcount,
+                p.yellowcardcount,
+                p.redcardcount,
+                p.jerseynumber,
+                p.playedminutes,
+                t.teamname AS teamname
+            FROM player p
+            LEFT JOIN team t ON p.teamid = t.teamid
+            WHERE p.teamid = $1
+        `;
+        const result = await db.query(query, [teamId]);
+        return result.rows;
+    }
+
     async createPlayer(firstName, lastName, position, dateOfBirth, nationality, teamId, goalCount, assistCount, yellowCardCount, redCardCount, jerseyNumber, playedMinutes) {
         const playerId = uuidv4();
+        const currentDate = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
 
         const query = `
-            INSERT INTO Player (playerId, firstName, lastName, position, dateOfBirth, nationality, teamId, goalCount, assistCount, yellowCardCount, redCardCount, jerseyNumber, playedMinutes)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+            INSERT INTO Player (playerId, firstName, lastName, position, dateOfBirth, nationality, teamId, goalCount, assistCount, yellowCardCount, redCardCount, jerseyNumber, playedMinutes, createdAt, updatedAt)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
         `;
-        await db.query(query, [playerId, firstName, lastName, position, dateOfBirth, nationality, teamId, goalCount, assistCount, yellowCardCount, redCardCount, jerseyNumber, playedMinutes]);
+        await db.query(query, [playerId, firstName, lastName, position, dateOfBirth, nationality, teamId, goalCount, assistCount, yellowCardCount, redCardCount, jerseyNumber, playedMinutes, currentDate, currentDate]);
 
-        return new PlayerDTO(playerId, firstName, lastName, position, dateOfBirth, nationality, teamId, goalCount, assistCount, yellowCardCount, redCardCount, jerseyNumber, playedMinutes);
+        return new PlayerDTO(playerId, firstName, lastName, position, dateOfBirth, nationality, teamId, goalCount, assistCount, yellowCardCount, redCardCount, jerseyNumber, playedMinutes, currentDate, currentDate);
     }
-
-/*    async getPlayerById(playerId) {
-        const query = 'SELECT * FROM Player WHERE playerId = $1';
-        const result = await db.query(query, [playerId]);
-
-        if (result.rows.length === 0) return null;
-
-        const row = result.rows[0];
-        return new PlayerDTO(row.playerid, row.firstname, row.lastname, row.position, row.dateofbirth, row.nationality, row.teamid, row.goalcount, row.assistcount, row.yellowcardcount, row.redcardcount, row.jerseynumber, row.playedminutes);
-    }
-
-    async getAllPlayers() {
-        const query = 'SELECT * FROM Player';
-        const result = await db.query(query);
-
-        return result.rows.map(row =>
-            new PlayerDTO(row.playerid, row.firstname, row.lastname, row.position, row.dateofbirth, row.nationality, row.teamid, row.goalcount, row.assistcount, row.yellowcardcount, row.redcardcount, row.jerseynumber, row.playedminutes)
-        );
-    }*/
 
     async updatePlayer(playerId, updates) {
         const fields = Object.keys(updates).map((field, i) => `${field} = $${i + 1}`).join(", ");
@@ -94,8 +98,6 @@ class PlayerDAO {
         const query = 'DELETE FROM Player WHERE playerId = $1';
         await db.query(query, [playerId]);
     }
-
 }
-
 
 module.exports = new PlayerDAO();

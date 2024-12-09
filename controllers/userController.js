@@ -28,7 +28,7 @@ const getUserById = async (req, res) => {
 // Utwórz nowego użytkownika
 const createUser = async (req, res) => {
     try {
-        const newUser = await UserDAO.createUser(req.body);
+        const newUser = await UserDAO.createUser(req.body.username, req.body.password);
         res.status(201).json(newUser);
     } catch (error) {
         console.error("Error creating user:", error);
